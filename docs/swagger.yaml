@@ -1,0 +1,222 @@
+basePath: /v1
+definitions:
+  main.CreateSongPayload:
+    properties:
+      bpm:
+        maximum: 240
+        minimum: 30
+        type: integer
+      name:
+        maxLength: 80
+        minLength: 1
+        type: string
+      sections:
+        items:
+          $ref: '#/definitions/main.SectionPayload'
+        maxItems: 50
+        minItems: 1
+        type: array
+    required:
+    - bpm
+    - name
+    - sections
+    type: object
+  main.SectionPayload:
+    properties:
+      bars:
+        maximum: 64
+        minimum: 1
+        type: integer
+      groups:
+        items:
+          type: integer
+        maxItems: 16
+        minItems: 1
+        type: array
+    required:
+    - bars
+    - groups
+    type: object
+  main.UpdateSongPayload:
+    properties:
+      bpm:
+        maximum: 240
+        minimum: 30
+        type: integer
+      name:
+        maxLength: 80
+        minLength: 1
+        type: string
+      sections:
+        items:
+          $ref: '#/definitions/main.SectionPayload'
+        maxItems: 50
+        minItems: 1
+        type: array
+    type: object
+  store.Section:
+    properties:
+      bars:
+        type: integer
+      groups:
+        items:
+          type: integer
+        type: array
+    type: object
+  store.Song:
+    properties:
+      bpm:
+        type: integer
+      id:
+        type: integer
+      name:
+        type: string
+      sections:
+        items:
+          $ref: '#/definitions/store.Section'
+        type: array
+    type: object
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: metro-math-go
+paths:
+  /songs:
+    get:
+      consumes:
+      - application/json
+      description: GET all  songs
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/store.Song'
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+      summary: GET ALL songs
+      tags:
+      - songs
+    post:
+      consumes:
+      - application/json
+      description: Create a song
+      parameters:
+      - description: Song payload
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/main.CreateSongPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/store.Song'
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+      summary: Create song
+      tags:
+      - songs
+  /songs/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a song
+      parameters:
+      - description: songId
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/store.Song'
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+      summary: DELETE A SONG
+      tags:
+      - songs
+    get:
+      consumes:
+      - application/json
+      description: Song bY ID
+      parameters:
+      - description: songId
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/store.Song'
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+      summary: Get song by id
+      tags:
+      - songs
+    patch:
+      consumes:
+      - application/json
+      description: Update a song
+      parameters:
+      - description: songId
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Song payload
+        in: body
+        name: body
+        schema:
+          $ref: '#/definitions/main.UpdateSongPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/store.Song'
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+      summary: Update song
+      tags:
+      - songs
+swagger: "2.0"
